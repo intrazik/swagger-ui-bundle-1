@@ -3,6 +3,11 @@ hb_swagger_ui_default:
   defaults: { _controller: HBSwaggerUiBundle:Docs:index}
   methods: [GET]
 
+hb_swagger_ui_private:
+  path:     /private
+  defaults: { _controller: HBSwaggerUiBundle:Docs:indexPrivate}
+  methods: [GET]
+
 hb_swagger_ui_swagger_file:
   path:     /file/{fileName}
   requirements:

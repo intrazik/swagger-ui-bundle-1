@@ -50,6 +50,41 @@ class DocsController extends Controller
 
     /**
      * @param Request $request
+     *
+     * @return Response
+     */
+    public function indexPrivateAction(Request $request)
+    {
+        if (!$request->get('url')) {
+            // if there is no ?url=... parameter, redirect to the default one
+            $specFiles = $this->getParameter('hb_swagger_ui.privatefiles');
+            
+            $defaultSpecFile = reset($specFiles);
+
+            return $this->redirect($this->getRedirectUrlToSpec($defaultSpecFile,'private'));
+        }
+
+        try {
+            // check if public/index.html exists and get its path if it does
+            $indexFilePath = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/index.html');
+        } catch (\InvalidArgumentException $exception) {
+            // index.html doesn't exist, let's update public/ with swagger-ui files
+            $publicDir = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/');
+
+            $swaggerDistDir = $this->getParameter('kernel.root_dir') . '/../vendor/swagger-api/swagger-ui/dist';
+
+            // update public dir
+            $this->get('filesystem')->mirror($swaggerDistDir, $publicDir);
+
+            // the public/index.html file should exists now, let's try to get its path again
+            $indexFilePath = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/index.html');
+        }
+
+        return new Response(file_get_contents($indexFilePath));
+    }
+
+    /**
+     * @param Request $request
      * @param string $fileName
      *
      * @return RedirectResponse
@@ -128,7 +163,7 @@ class DocsController extends Controller
      *
      * @return string
      */
-    private function getRedirectUrlToSpec($fileName)
+    private function getRedirectUrlToSpec($fileName,$context="default")
     {
         if (strpos($fileName, '/') === 0 || preg_match('#http[s]?://#', $fileName)) {
             // if absolute path or URL use it raw
@@ -141,6 +176,6 @@ class DocsController extends Controller
             );
         }
 
-        return $this->generateUrl('hb_swagger_ui_default', ['url' => $specUrl]);
+        return $this->generateUrl('hb_swagger_ui_'.$context, ['url' => $specUrl]);
     }
 }
