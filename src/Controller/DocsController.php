@@ -20,15 +20,12 @@ class DocsController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if (!$request->get('url')) {
-            // if there is no ?url=... parameter, redirect to the default one
+        
             $specFiles = $this->getParameter('hb_swagger_ui.files');
 
             $defaultSpecFile = reset($specFiles);
 
-            return $this->redirect($this->getRedirectUrlToSpec($defaultSpecFile));
-        }
-
+        
         try {
             // check if public/index.html exists and get its path if it does
             $indexFilePath = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/index.html');
@@ -45,7 +42,8 @@ class DocsController extends Controller
             $indexFilePath = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/index.html');
         }
 
-        return new Response(file_get_contents($indexFilePath));
+        return $this->render('HBSwaggerUiBundle:Default:index.html.twig',['url'=>$defaultSpecFile]);
+
     }
 
     /**
@@ -55,14 +53,11 @@ class DocsController extends Controller
      */
     public function indexPrivateAction(Request $request)
     {
-        if (!$request->get('url')) {
-            // if there is no ?url=... parameter, redirect to the default one
+      
             $specFiles = $this->getParameter('hb_swagger_ui.privatefiles');
             
             $defaultSpecFile = reset($specFiles);
 
-            return $this->redirect($this->getRedirectUrlToSpec($defaultSpecFile,'private'));
-        }
 
         try {
             // check if public/index.html exists and get its path if it does
@@ -79,8 +74,10 @@ class DocsController extends Controller
             // the public/index.html file should exists now, let's try to get its path again
             $indexFilePath = $this->get('file_locator')->locate('@HBSwaggerUiBundle/Resources/public/index.html');
         }
+        
+        return $this->render('HBSwaggerUiBundle:Default:index.html.twig',['url'=>$defaultSpecFile]);
 
-        return new Response(file_get_contents($indexFilePath));
+
     }
 
     /**
