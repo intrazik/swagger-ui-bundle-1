@@ -8,6 +8,11 @@ hb_swagger_ui_private:
   defaults: { _controller: HBSwaggerUiBundle:Docs:indexPrivate}
   methods: [GET]
 
+hb_swagger_ui_compta:
+  path:     /compta
+  defaults: { _controller: HBSwaggerUiBundle:Docs:indexCompta}
+  methods: [GET]
+
 hb_swagger_ui_swagger_file:
   path:     /file/{fileName}
   requirements:

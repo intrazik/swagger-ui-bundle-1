@@ -25,6 +25,11 @@ class Configuration implements ConfigurationInterface
                     ->prototype('scalar')
                     ->end()
             ->end()
+            ->arrayNode('comptafiles')
+                    ->isRequired()
+                    ->prototype('scalar')
+                    ->end()
+            ->end()
         ;
 
         return $treeBuilder;
