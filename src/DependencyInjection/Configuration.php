@@ -24,12 +24,17 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->prototype('scalar')
                     ->end()
-            ->end()
-            ->arrayNode('comptafiles')
+                ->end()
+                ->arrayNode('comptafiles')
                     ->isRequired()
                     ->prototype('scalar')
                     ->end()
-            ->end()
+                ->end()
+                ->arrayNode('accessfiles')
+                    ->isRequired()
+                    ->prototype('scalar')
+                    ->end()
+                ->end()
         ;
 
         return $treeBuilder;

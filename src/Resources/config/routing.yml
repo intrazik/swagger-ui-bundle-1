@@ -13,6 +13,11 @@ hb_swagger_ui_compta:
   defaults: { _controller: HBSwaggerUiBundle:Docs:indexCompta}
   methods: [GET]
 
+hb_swagger_ui_access:
+  path:     /access
+  defaults: { _controller: HBSwaggerUiBundle:Docs:indexAccess}
+  methods: [GET]
+
 hb_swagger_ui_swagger_file:
   path:     /file/{fileName}
   requirements:
